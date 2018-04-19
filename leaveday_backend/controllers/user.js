@@ -1,0 +1,28 @@
+
+exports.userIndex = async function(req, res, next) { //유저 로그인
+    const output = new Object();
+    try {
+        // const userInfo = await mongoQuery.findOne({ email: req.body.userId });
+        // if (userInfo) {
+        //     const userPwdCheck = await bcrypt.hashCompare(req.body.userPwd, userInfo.pwd);
+        //     if (userPwdCheck == true) {
+        //         const userToken = await jsonWebToken.tokenCreate(userInfo._id);
+                output.msg = 'success';
+        //         output.data = userToken;
+        //         res.cookie('userToken', userToken);
+        //         res.setHeader('userToken', userToken);
+                res.send(output)
+        //     } else {
+                // output.msg = 'password incorrect';
+        //         res.status(200).json(output);
+        //     }
+        // } else {
+        //     output.msg = 'user not exist';
+        //     res.status(200).json(output);
+        // }
+    } catch (e) {
+        output.msg = 'try fail';
+        output.data = null;
+        res.send(output);
+    }
+}
