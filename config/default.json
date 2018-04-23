@@ -1,0 +1,29 @@
+{
+    "Customer": {
+        "dbConfig": {
+            "host": "localhost",
+            "port": 27777,
+            "dbName": "leaveDB"
+        },
+        "hostConfig": {
+            "host": "localhost",
+            "port": 3001
+        },
+        "google": {
+            "clientId": "781928269095-k2asibrbmrnegkv14lhn8fchm783i4vt.apps.googleusercontent.com",
+            "secret": "wmTCLW9o__1XecvcOArQMQ3l"
+        },
+        "facebook": {
+            "clientId": "1991349164483889",
+            "secret": "6b8ea98218df01b1904808044b2e4132"
+        },
+        "kakao": {
+            "clientId": "5b185a9d0c6f64c38be9e14a4868c448",
+            "secret": "rXE2PtNsSvbBz0a4R6QKpYA6TXerJvfW"
+        },
+        "credit": {
+            "initialLimit": 100,
+            "initialDays": 1
+        }
+    }
+}
