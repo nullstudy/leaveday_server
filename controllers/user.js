@@ -12,7 +12,8 @@ exports.userIndex = async function(req, res, next) { //유저 로그인
         //         output.data = userToken;
         //         res.cookie('userToken', userToken);
         //         res.setHeader('userToken', userToken);
-                res.send(output)
+                // res.send(output)
+                res.redirect('https://www.leaveday.cf');
         //     } else {
                 // output.msg = 'password incorrect';
         //         res.status(200).json(output);
