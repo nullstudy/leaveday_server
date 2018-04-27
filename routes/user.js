@@ -7,7 +7,7 @@ const jsonWebToken = require('../util/token');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const KakaoStrategy = require('passport-kakao').Strategy;
-const user = require('../controllers/User');
+const user = require('../controllers/user');
 
 module.exports = function(app, passport, config) {
     app.get('/', user.userIndex);
