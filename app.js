@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const user = require('./routes/user.js')(app,passport, config)
-// const userRoute = require('./route/userRoute.js')(app, passport);
+const jobdairy = require('./route/jobdairy.js')(app);
 
 // error handler
 app.use(function(err, req, res, next) {
