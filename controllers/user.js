@@ -7,7 +7,7 @@ exports.userIndex = async function(req, res, next) { //유저 로그인
         //     const userPwdCheck = await bcrypt.hashCompare(req.body.userPwd, userInfo.pwd);
         //     if (userPwdCheck == true) {
         //         const userToken = await jsonWebToken.tokenCreate(userInfo._id);
-        console.log('여기탈거아니냐 ')
+        console.log('여기탈거아니냐 ');
         output.msg = 'success';
         //         output.data = userToken;
         //         res.cookie('userToken', userToken);
