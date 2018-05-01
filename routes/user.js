@@ -12,7 +12,8 @@ const user = require('../controllers/user');
 module.exports = function(app, passport, config) {
     app.get('/', user.userIndex);
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-    app.get('/auth/facebook', passport.authenticate('facebook', { authType: 'rerequest', scope: ['public_profile', 'email'] }));
+    // app.get('/auth/facebook', passport.authenticate('facebook', { authType: 'rerequest', scope: ['public_profile', 'email'] }));
+    app.get('/auth/facebook', passport.authenticate('facebook', { authType: 'rerequest', scope: ['email'] }));
     app.get('/auth/kakao', passport.authenticate('kakao-login'));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) { res.redirect('/') });
     app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) { res.redirect('/') });
@@ -29,6 +30,9 @@ module.exports = function(app, passport, config) {
             profileFields: ['id', 'email']
         },
         async function(accessToken, refreshToken, profile, done) {
+            console.log('여기는 타는 거니?')
+            console.log(config.get('Customer.facebook.clientId'))
+            console.log(config.get('Customer.facebook.secret'))
             const userId = { email: profile.emails[0].value }
             const userInfo = await dbQuery.FindOne(UserModel, userId);
             if (userInfo) {
