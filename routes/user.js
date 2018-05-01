@@ -25,7 +25,8 @@ module.exports = function(app, passport, config) {
             clientSecret: config.get('Customer.facebook.secret'),
             callbackURL: "https://www.leaveday.cf/auth/facebook/callback",
             // callbackURL: "/auth/facebook/callback",
-            profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified', 'displayName']
+            // profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified', 'displayName']
+            profileFields: ['id', 'email']
         },
         async function(accessToken, refreshToken, profile, done) {
             const userId = { email: profile.emails[0].value }
