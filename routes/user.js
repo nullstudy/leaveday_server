@@ -23,8 +23,8 @@ module.exports = function(app, passport, config) {
     passport.use(new FacebookStrategy({
             clientID: config.get('Customer.facebook.clientId'),
             clientSecret: config.get('Customer.facebook.secret'),
-            callbackURL: "https://www.leaveday.cf/auth/facebook/callback",
-            // callbackURL: "/auth/facebook/callback",
+            // callbackURL: "https://www.leaveday.cf/auth/facebook/callback",
+            callbackURL: "/auth/facebook/callback",
             // profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified', 'displayName']
             profileFields: ['id', 'email']
         },
