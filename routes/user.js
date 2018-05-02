@@ -8,6 +8,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const KakaoStrategy = require('passport-kakao').Strategy;
 const user = require('../controllers/user');
+const dbQuery = require('../util/dbQuery');
 
 module.exports = function(app, passport, config) {
     app.get('/', user.userIndex);
@@ -67,6 +68,7 @@ module.exports = function(app, passport, config) {
         },
         async function(accessToken, refreshToken, profile, done) {
             const userId = { email: profile.emails[0].value }
+            console.log('userId',userId)
             const userInfo = await dbQuery.FindOne(UserModel, userId);
             if (userInfo) {
                 var userToken = await jsonWebToken.tokenCreate(userInfo._id);
