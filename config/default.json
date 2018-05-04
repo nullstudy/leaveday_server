@@ -2,7 +2,7 @@
     "Customer": {
         "dbConfig": {
             "host": "localhost",
-            "port": 27777,
+            "port": 27017,
             "dbName": "leaveDB"
         },
         "hostConfig": {
