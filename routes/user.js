@@ -11,29 +11,35 @@ module.exports = function(app, passport, config) {
     app.get('/', userController.userIndex);
     app.get('/loginSuccess', userController.userAuth);
     app.get('/userInfo',jsonWebToken.authMiddleware,userUtil.userVerify,userController.userCheck);
-    
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
     app.get('/auth/kakao', passport.authenticate('kakao-login'));
     app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) { res.redirect('/loginSuccess') });
     app.get('/auth/kakao/callback', passport.authenticate('kakao-login', { failureRedirect: '/login' }), function(req, res) { res.redirect('/') });
+
+    app.put('/leaveInsert',jsonWebToken.authMiddleware,userUtil.userVerify,userController.userRegister); //leaveDay 등록
+
     passport.serializeUser(function(user, done) { done(null, user) });
     passport.deserializeUser(function(user, done) { done(null, user) });
 
     passport.use(new GoogleStrategy({
             clientID: config.get('Customer.google.clientId'),
             clientSecret: config.get('Customer.google.secret'),
-            callbackURL: 'https://www.leaveday.cf/auth/google/callback'
-            // callbackURL: '/auth/google/callback'
+            // callbackURL: 'https://www.leaveday.cf/auth/google/callback'
+            callbackURL: '/auth/google/callback'
         },
         async function(accessToken, refreshToken, profile, done) {
             const userId = { email: profile.emails[0].value }
             const userInfo = await dbQuery.FindOne(UserModel, userId);
+            console.log('userinfo',userInfo)
             if (userInfo) {
-
                 let userTokendata = {}; //토큰저장
                 userTokendata._id = userInfo._id
                 userTokendata.name = userInfo.name
                 userTokendata.email = userInfo.email
+                userTokendata.startDT = userInfo.startDT
+                userTokendata.endDT = userInfo.endDT
+                userTokendata.createDT = userInfo.createDT
+                userTokendata.leaveCount = userInfo.leaveCount
                 var userToken = await jsonWebToken.tokenCreate(userTokendata);
                 // var userToken = await jsonWebToken.tokenCreate(userInfo._id);
                 //패스포트
@@ -56,6 +62,12 @@ module.exports = function(app, passport, config) {
                 userTokendata._id = user._id
                 userTokendata.name = profile.displayName;
                 userTokendata.email = profile.emails[0].value;
+                userTokendata.startDT = false
+                userTokendata.endDT = false
+                userTokendata.createDT = false
+                userTokendata.leaveCount = false
+
+
                 let userToken = await jsonWebToken.tokenCreate(userTokendata);
 
                 let userData = {}; //패스포트 저장.
