@@ -17,7 +17,7 @@ exports.userIndex = async function(req, res, next) { //유저 로그인
         //         res.setHeader('userToken', userToken);
                 // res.send(output)
         // res.redirect('http://13.209.37.149:6005/main');
-        res.redirect('http://localhost:6005/main');
+        res.redirect('http://localhost:6005/');
         //     } else {
                 // output.msg = 'password incorrect';
         //         res.status(200).json(output);
