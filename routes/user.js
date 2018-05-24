@@ -14,7 +14,7 @@ module.exports = function(app, passport, config) {
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
     app.get('/auth/kakao', passport.authenticate('kakao-login'));
     app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) { res.redirect('/loginSuccess') });
-    app.get('/auth/kakao/callback', passport.authenticate('kakao-login', { failureRedirect: '/login' }), function(req, res) { res.redirect('/') });
+    app.get('/auth/kakao/callback', passport.authenticate('kakao-login', { failureRedirect: '/login' }), function(req, res) { res.redirect('/loginSuccess') });
 
     app.put('/leaveInsert',jsonWebToken.authMiddleware,userUtil.userVerify,userController.userRegister); //leaveDay 등록
 
@@ -30,15 +30,14 @@ module.exports = function(app, passport, config) {
         async function(accessToken, refreshToken, profile, done) {
             const userId = { email: profile.emails[0].value }
             const userInfo = await dbQuery.FindOne(UserModel, userId);
-            console.log('userinfo',userInfo)
             if (userInfo) {
                 let userTokendata = {}; //토큰저장
                 userTokendata._id = userInfo._id
                 userTokendata.name = userInfo.name
                 userTokendata.email = userInfo.email
+                userTokendata.image = userInfo.image
                 userTokendata.startDT = userInfo.startDT
                 userTokendata.endDT = userInfo.endDT
-                userTokendata.createDT = userInfo.createDT
                 userTokendata.leaveCount = userInfo.leaveCount
                 var userToken = await jsonWebToken.tokenCreate(userTokendata);
                 // var userToken = await jsonWebToken.tokenCreate(userInfo._id);
@@ -54,6 +53,7 @@ module.exports = function(app, passport, config) {
                 let user = new UserModel();
                 user.email = profile.emails[0].value;
                 user.name = profile.displayName;
+                user.image = profile.photos[0].value
                 user.save(function(err) {
                     if (err) return new Error("add error");
                 });
@@ -61,15 +61,12 @@ module.exports = function(app, passport, config) {
                 let userTokendata = {}; //토큰저장
                 userTokendata._id = user._id
                 userTokendata.name = profile.displayName;
-                userTokendata.email = profile.emails[0].value;
+                userTokendata.email = profile.emails[0].value
+                userTokendata.image = profile.photos[0].value
                 userTokendata.startDT = false
                 userTokendata.endDT = false
-                userTokendata.createDT = false
                 userTokendata.leaveCount = false
-
-
                 let userToken = await jsonWebToken.tokenCreate(userTokendata);
-
                 let userData = {}; //패스포트 저장.
                 userData._id = user._id
                 userData.name = profile.displayName;
@@ -88,7 +85,16 @@ module.exports = function(app, passport, config) {
             const userId = { email: profile._json.kaccount_email }
             const userInfo = await dbQuery.FindOne(UserModel, userId);
             if (userInfo) {
-                var userToken = await jsonWebToken.tokenCreate(userInfo._id);
+                let userTokendata = {}; //토큰저장
+                userTokendata._id = userInfo._id
+                userTokendata.name = userInfo.name
+                userTokendata.email = userInfo.email
+                userTokendata.image = userInfo.image
+                userTokendata.startDT = userInfo.startDT
+                userTokendata.endDT = userInfo.endDT 
+                userTokendata.leaveCount = userInfo.leaveCount
+
+                var userToken = await jsonWebToken.tokenCreate(userTokendata);
                 var userData = {};
                 userData._id = userInfo._id;
                 userData.name = userInfo.name;
@@ -99,11 +105,20 @@ module.exports = function(app, passport, config) {
                 let user = new UserModel();
                 user.email = profile._json.kaccount_email;
                 user.name = profile.displayName;
+                profile._json.properties.thumbnail_image 
+                ? user.image = profile._json.properties.thumbnail_image : user.image = 'http://mblogthumb1.phinf.naver.net/20150122_180/zikil337_1421903667352TrM3z_JPEG/1406712927465_1406709120385-1.jpg?type=w2'
                 user.save(function(err) {
                     if (err) return new Error("add error");
                 });
-                var userData = {};
-                var userToken = await jsonWebToken.tokenCreate(user._id);
+                let userTokendata = {}; //토큰저장
+                userTokendata._id = user._id
+                userTokendata.name = profile.displayName;
+                userTokendata.email = user.email
+                userTokendata.image = user.image
+                userTokendata.startDT = false
+                userTokendata.endDT = false
+                userTokendata.leaveCount = false
+                var userToken = await jsonWebToken.tokenCreate(userTokendata);
                 userData._id = user._id
                 userData.name = profile.displayName;
                 userData.userToken = userToken;
