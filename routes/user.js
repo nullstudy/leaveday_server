@@ -6,6 +6,8 @@ const UserModel = require('../model/Userdb');
 const dbQuery = require('../util/dbQuery');
 const userController = require('../controllers/user');
 const userUtil = require('../util/userCheck');
+
+
 module.exports = function(app, passport, config) {
     
     app.get('/', userController.userIndex);
@@ -15,7 +17,6 @@ module.exports = function(app, passport, config) {
     app.get('/auth/kakao', passport.authenticate('kakao-login'));
     app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) { res.redirect('/loginSuccess') });
     app.get('/auth/kakao/callback', passport.authenticate('kakao-login', { failureRedirect: '/login' }), function(req, res) { res.redirect('/loginSuccess') });
-
     app.put('/leaveInsert',jsonWebToken.authMiddleware,userUtil.userVerify,userController.userRegister); //leaveDay 등록
 
     passport.serializeUser(function(user, done) { done(null, user) });
@@ -31,23 +32,8 @@ module.exports = function(app, passport, config) {
             const userId = { email: profile.emails[0].value }
             const userInfo = await dbQuery.FindOne(UserModel, userId);
             if (userInfo) {
-                let userTokendata = {}; //토큰저장
-                userTokendata._id = userInfo._id
-                userTokendata.name = userInfo.name
-                userTokendata.email = userInfo.email
-                userTokendata.image = userInfo.image
-                userTokendata.startDT = userInfo.startDT
-                userTokendata.endDT = userInfo.endDT
-                userTokendata.leaveCount = userInfo.leaveCount
-                var userToken = await jsonWebToken.tokenCreate(userTokendata);
-                // var userToken = await jsonWebToken.tokenCreate(userInfo._id);
-                //패스포트
-                var userData = {};
-                userData._id = userInfo._id;
-                userData.name = userInfo.name;
-                userData.userToken = userToken;
-                userData.email = userInfo.email;
-                done(null, userData);
+                var userData = await tokenSave(userInfo)
+                done(null,userData);
             } else {
                 //디비저장
                 let user = new UserModel();
@@ -85,21 +71,7 @@ module.exports = function(app, passport, config) {
             const userId = { email: profile._json.kaccount_email }
             const userInfo = await dbQuery.FindOne(UserModel, userId);
             if (userInfo) {
-                let userTokendata = {}; //토큰저장
-                userTokendata._id = userInfo._id
-                userTokendata.name = userInfo.name
-                userTokendata.email = userInfo.email
-                userTokendata.image = userInfo.image
-                userTokendata.startDT = userInfo.startDT
-                userTokendata.endDT = userInfo.endDT 
-                userTokendata.leaveCount = userInfo.leaveCount
-
-                var userToken = await jsonWebToken.tokenCreate(userTokendata);
-                var userData = {};
-                userData._id = userInfo._id;
-                userData.name = userInfo.name;
-                userData.userToken = userToken;
-                userData.email = userInfo.email;
+                var userData = await tokenSave(userInfo)
                 done(null, userData);
             } else {
                 let user = new UserModel();
@@ -127,5 +99,23 @@ module.exports = function(app, passport, config) {
             }
         }
     ));
+    async function tokenSave(userInfo) {
+        let userTokendata = {}; //토큰저장
+        userTokendata._id = userInfo._id
+        userTokendata.name = userInfo.name
+        userTokendata.email = userInfo.email
+        userTokendata.image = userInfo.image
+        userTokendata.startDT = userInfo.startDT
+        userTokendata.endDT = userInfo.endDT
+        userTokendata.leaveCount = userInfo.leaveCount
+        var userToken = await jsonWebToken.tokenCreate(userTokendata);
+        //패스포트
+        var userData = {};
+        userData._id = userInfo._id;
+        userData.name = userInfo.name;
+        userData.userToken = userToken;
+        userData.email = userInfo.email;
+        return userData;
+    }
 
 }
