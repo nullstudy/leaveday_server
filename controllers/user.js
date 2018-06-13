@@ -73,6 +73,7 @@ exports.userRegister = async function(req, res, next) { // leaveday 등록
         userTokendata._id = req.body.userInfo[0]._id;
         userTokendata.name = req.body.userInfo[0].name;
         userTokendata.email = req.body.userInfo[0].email;
+        userTokendata.image = req.body.userInfo[0].image;
         userTokendata.startDT = userInfo.startDT;
         userTokendata.endDT = userInfo.endDT;
         userTokendata.leaveCount = req.body.leaveCount;

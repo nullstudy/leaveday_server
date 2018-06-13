@@ -1,15 +1,15 @@
 const jsonWebToken = require('../util/token');
+const userUtil = require('../util/userCheck');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const KakaoStrategy = require('passport-kakao').Strategy;
 const UserModel = require('../model/Userdb');
 const dbQuery = require('../util/dbQuery');
 const userController = require('../controllers/user');
-const userUtil = require('../util/userCheck');
+
 
 
 module.exports = function(app, passport, config) {
-    
     app.get('/', userController.userIndex);
     app.get('/loginSuccess', userController.userAuth);
     app.get('/userInfo',jsonWebToken.authMiddleware,userUtil.userVerify,userController.userCheck);
@@ -21,7 +21,6 @@ module.exports = function(app, passport, config) {
 
     passport.serializeUser(function(user, done) { done(null, user) });
     passport.deserializeUser(function(user, done) { done(null, user) });
-
     passport.use(new GoogleStrategy({
             clientID: config.get('Customer.google.clientId'),
             clientSecret: config.get('Customer.google.secret'),
@@ -78,7 +77,7 @@ module.exports = function(app, passport, config) {
                 user.email = profile._json.kaccount_email;
                 user.name = profile.displayName;
                 profile._json.properties.thumbnail_image 
-                ? user.image = profile._json.properties.thumbnail_image : user.image = 'http://mblogthumb1.phinf.naver.net/20150122_180/zikil337_1421903667352TrM3z_JPEG/1406712927465_1406709120385-1.jpg?type=w2'
+                ? user.image = profile._json.properties.thumbnail_image : user.image = 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50'
                 user.save(function(err) {
                     if (err) return new Error("add error");
                 });

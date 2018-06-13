@@ -13,7 +13,7 @@ exports.FindOne = function(model, data) {
 
 
 //mongodb save문
-exports.saveRoom = function(data) {
+exports.save = function(data) {
     return new Promise(function(resolve, reject) {
         data.save(function(err, result) {
             if (err) {

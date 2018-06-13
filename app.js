@@ -42,9 +42,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
 });
 
-const user = require('./routes/user.js')(app,passport, config)
-const jobdairy = require('./routes/jobdairy.js')(app);
+const userRouter = require('./routes/user.js')(app,passport, config);
+const jobdairyRouter = require('./routes/jobdairy.js')(app);
+const todoRouter = require('./routes/todo.js')(app);
 
 app.listen(3001,function(req,res){
-  console.log('server connect success')
+  console.log('server connect success');
 })
