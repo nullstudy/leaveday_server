@@ -50,7 +50,7 @@ exports.aggregate = function(model, findData) {
     })
 };
 
-exports.getUserFind = function(model, data) {
+exports.Find = function(model, data) {
     return new Promise(function(resolve, reject) {
         model.find(data, function(err, result) {
             if (err)
@@ -62,6 +62,21 @@ exports.getUserFind = function(model, data) {
         });
     });
 }
+
+exports.findOption1 = function(model, findData, showData) { //limit추가
+    return new Promise(function(resolve, reject) {
+        model.find(findData, showData).exec(function(err, result) {
+            if (err) {
+                console.log(err)
+                reject(new Error("add error"));
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+
 
 exports.findLimit = function(model, findData, showData) { //limit추가
     return new Promise(function(resolve, reject) {

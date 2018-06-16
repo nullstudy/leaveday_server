@@ -91,7 +91,7 @@ module.exports = function(app, passport, config) {
                 userTokendata.leaveCount = false
                 var userToken = await jsonWebToken.tokenCreate(userTokendata);
                 userData._id = user._id
-                userData.name = profile.displayName;
+                userData.name = profile.displayName;zco
                 userData.userToken = userToken;
                 userData.email = profile._json.kaccount_email
                 done(null, userData);

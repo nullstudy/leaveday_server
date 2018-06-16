@@ -5,7 +5,7 @@ exports.userVerify = async function(req, res, next) { // 유저검증
     let output = {};
     let tokenCheck = req.body.tokenData;
     let findData = { _id: tokenCheck.ObjectId };
-    let userInfo = await mongoQuery.getUserFind(User, findData);
+    let userInfo = await mongoQuery.Find(User, findData);
 
     if (userInfo == 0 || userInfo == undefined) {
         output.msg = "user not exist";
