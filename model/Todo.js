@@ -10,7 +10,7 @@ const todoSchema = new Schema({
         todo: String, 
         status: Boolean
     }],
-    status :  { type: Boolean, default: false }
+    status :  { type: Number, default: 1 } 
 });
 const TodoModel = mongoose.model('Todo', todoSchema);
 module.exports = TodoModel;

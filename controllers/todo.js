@@ -17,7 +17,6 @@ exports.todoList = async function(req, res, next) { //Todo 찾기
             };
             // const todoInfo = await dbQuery.Find(TodoModel, user_id);
             let todoInfo = await dbQuery.findOption1(TodoModel, findData,showData );
-            console.log(todoInfo)
             output.msg = 'success';
             output.data = todoInfo;
             res.status(200).send(output);
@@ -47,6 +46,7 @@ exports.todoCreate = async function(req, res, next) { //Todo 만들기
             Todo.startDT = new Date(req.body.startDT)
             Todo.endDT = new Date(req.body.endDT);
             Todo.detail = req.body.detail;
+            Todo.startDT > Todo.createDT ? Todo.status = 2   : Todo.status = 1   
             await dbQuery.save(Todo);
             output.msg = 'success';
             res.status(200).send(output);
