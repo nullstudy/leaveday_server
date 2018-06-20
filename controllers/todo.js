@@ -27,7 +27,6 @@ exports.todoList = async function(req, res, next) { //Todo 찾기
     } catch (e) {
         console.log(e)
         output.msg = 'fail';
-        res.setHeader('Authorization', tokenCheck.token);
         res.status(404).send(output);
     }
 }

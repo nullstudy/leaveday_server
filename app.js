@@ -43,7 +43,7 @@ app.use(function(err, req, res, next) {
 });
 
 const userRouter = require('./routes/user.js')(app,passport, config);
-const jobdairyRouter = require('./routes/jobdairy.js')(app);
+const jobdairyRouter = require('./routes/jobdiary.js')(app);
 const todoRouter = require('./routes/todo.js')(app);
 
 app.listen(3001,function(req,res){
