@@ -43,8 +43,28 @@ exports.getDiary =async function(req,res,next){ //leaveDay list
         let page = req.query.page || 1;
         let count = 10;
         let pageCount = (page - 1) * count;
+
+
+
+
+
         if (userInfo) {
-            findData =  [
+
+            let countFind =  [
+                { $match : {  author : String(userInfo[0]._id)}},
+                {'$group' : 
+                    {
+                        '_id' : null, 
+                        'count' : {'$sum' : 1}
+                    }
+                },
+                { $project : {
+                    _id : 0,  
+                }}
+            ];
+        
+            let getTotal = await dbQuery.aggregate(DiaryModel, countFind); 
+            let findData =  [
                 { $match : {  author : String(userInfo[0]._id)}},
                 { $project : {
                     _id : 1,
@@ -55,12 +75,12 @@ exports.getDiary =async function(req,res,next){ //leaveDay list
                     date : { $dateToString: { format: "%Y.%m.%d", date: "$date" } },
                     leaveCount : 1,
                     state :  1 
-                    }
-                },
+                }},
                 { $sort: sort },
                 {"$skip":pageCount },
                 {"$limit":count }
             ];
+        
             let getJobDiary = await dbQuery.aggregate(DiaryModel, findData); 
             
             for(var item in getJobDiary){
@@ -69,9 +89,9 @@ exports.getDiary =async function(req,res,next){ //leaveDay list
                 if(getJobDiary[item].state == 3) getJobDiary[item].state = { state: '별로', number : 3 }
                 if(getJobDiary[item].state == 4) getJobDiary[item].state = { state: '화남', number : 4 }
                 if(getJobDiary[item].state == 5) getJobDiary[item].state = { state: '빡침', number : 5 }
+                getJobDiary[item].recordCount = getTotal[0].count;
             }
             output.data = getJobDiary;
-        
             output.msg = 'success';
             res.status(200).send(output);
         } else {
@@ -138,7 +158,6 @@ exports.getDetailDiary = async function(req,res,next) {
 exports.editDiary = async function(req,res,next) {
     const output = {};
     try {
-        console.log(req.params._id)
         if (req.params._id) {
 
             let findData = { "_id": ObjectId(req.params._id) };
