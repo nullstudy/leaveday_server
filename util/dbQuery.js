@@ -1,3 +1,4 @@
+
 exports.FindOne = function(model, data) {
     return new Promise(function(resolve, reject) {
         model.findOne(data, function(err, result) {
@@ -38,6 +39,24 @@ exports.updateDate = function(model, findData, updateData) {
         })
     })
 };
+
+
+//update
+exports.findOneAndUpdate = function(model, findData, updateData) {
+
+    return new Promise(function(resolve, reject) {
+        model.findOneAndUpdate( findData, updateData, { returnNewDocument: true }, function(err, result) {
+            if (err) {
+                reject(new Error("update error"));
+            } else {
+                resolve(result);
+            }
+        })
+    })
+
+};
+
+
 
 //aggregate
 exports.aggregate = function(model, findData) {

@@ -6,17 +6,24 @@ exports.todoList = async function(req, res, next) { //Todo 찾기
     const output = {};
     try {
         if (req.query._id) {
-            let findData = { author: ObjectId(req.query._id) };
-            let showData = {
-                title : 1,
-                createDT:1,
-                startDT:1,
-                endDT:1,
-                detail:1,
-                status:1
-            };
-            // const todoInfo = await dbQuery.Find(TodoModel, user_id);
-            let todoInfo = await dbQuery.findOption1(TodoModel, findData,showData );
+            let findData =  [
+                { $match : {  author: ObjectId(req.query._id) }},
+                {
+                    $addFields: { active : false }
+                },
+                { $project : {
+                    _id : 1,
+                    title : 1,
+                    createDT : 1,
+                    startDT : 1,
+                    endDT: 1,
+                    detail : 1,
+                    status : 1,
+                    active : 1 
+                    }
+                }
+            ];
+            let todoInfo = await dbQuery.aggregate(TodoModel, findData); 
             output.msg = 'success';
             output.data = todoInfo;
             res.status(200).send(output);
@@ -30,7 +37,6 @@ exports.todoList = async function(req, res, next) { //Todo 찾기
         res.status(404).send(output);
     }
 }
-
 
 exports.todoCreate = async function(req, res, next) { //Todo 만들기
     const output = {};
@@ -60,4 +66,36 @@ exports.todoCreate = async function(req, res, next) { //Todo 만들기
         res.setHeader('Authorization', tokenCheck.token);
         res.status(404).send(output);
     }
+}
+
+exports.todoUpdate = async function(req,res,next) {
+    const output = {};
+    try {
+        let tokenCheck = req.body.tokenData;
+        let userInfo = req.body.userInfo;
+        if (userInfo) {
+            let detail = {
+                "_id":req.body.detail_id,
+                'todo' : req.body.todo,
+                "status": req.body.status
+            }
+            let findData = { "detail._id": ObjectId(req.body.detail_id)};
+            // let findData = { _id: ObjectId(req.body._id), "detail._id": ObjectId(req.body.detail_id)};
+            let updateData = {"$set": {"detail.$": detail }};
+            let putTodo = await dbQuery.findOneAndUpdate(TodoModel, findData, updateData);
+            output.msg = 'success';
+            res.status(200).send(output);
+        } else {
+            output.msg = 'not auth';
+            res.setHeader('Authorization', tokenCheck.token);
+            res.status(200).send(output);
+        }
+    } catch (e) {
+        console.log(e)
+        output.msg = 'fail';
+        res.setHeader('Authorization', tokenCheck.token);
+        res.status(404).send(output);
+    }
+
+    
 }

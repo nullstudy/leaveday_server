@@ -44,10 +44,6 @@ exports.getDiary =async function(req,res,next){ //leaveDay list
         let count = 10;
         let pageCount = (page - 1) * count;
 
-
-
-
-
         if (userInfo) {
 
             let countFind =  [
@@ -153,7 +149,6 @@ exports.getDetailDiary = async function(req,res,next) {
         res.status(404).send(output);
     }
 }
-
 
 exports.editDiary = async function(req,res,next) {
     const output = {};
