@@ -5,7 +5,7 @@ const diarySchema = new Schema({
     content: String,  // 글내용,
     author : String,
     state : Number, // 빡침,화남,별로,평온,행복 
-    date: { type: Date ,default : new Date() }, //TodoList 작성날 시작일
+    date: Date, //TodoList 작성날 시작일
     views: { type: Number, default : 0 }, 
     leaveCount: Number, // 깍을 day count
     updated: [{content: String, date: { type: Date, default: new Date()}}],

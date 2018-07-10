@@ -2,6 +2,30 @@ var DiaryModel = require('../model/jobdiarydb');
 var ObjectId = require('mongodb').ObjectID;
 var dbQuery = require('../util/dbQuery');
 
+exports.mainDiary = async function(req,res,next){
+ const output = {};
+ try {
+    let findData =  [
+        { $match : { author : String(req.body.userInfo[0]._id) , "date" : { $gte: new Date(req.query.startDT), $lte: new Date(req.query.endDT) }}},
+        { $project : {
+            _id : 1,
+            title : 1,
+            content : 1,
+            date : { $dateToString: { format: "%Y-%m-%d", date: "$date" } }
+        }}
+    ];
+
+    let mainDiary = await dbQuery.aggregate(DiaryModel, findData); 
+    output.data = mainDiary;
+    output.msg = 'success';
+    res.status(200).send(output);
+ } catch (e) {
+    console.log(e)
+    output.msg = 'fail';
+    res.setHeader('Authorization', tokenCheck.token);
+    res.status(404).send(output);
+ }
+} 
 exports.createDiary =async function(req,res,next){ //leaveDay 정보입력
     const output = {};
     try {
@@ -13,6 +37,7 @@ exports.createDiary =async function(req,res,next){ //leaveDay 정보입력
                 diary.author = String(userInfo[0]._id);
                 diary.title = String(req.body.title+'테스트');
                 diary.content = String(req.body.content);
+                diary.date = Date(req.body.date);
                 diary.state = Number(req.body.state);
                 diary.leaveCount = Number(req.body.leaveCount);
                 await dbQuery.save(diary);

@@ -80,10 +80,29 @@ exports.todoUpdate = async function(req,res,next) {
                 "status": req.body.status
             }
             let findData = { "detail._id": ObjectId(req.body.detail_id)};
-            // let findData = { _id: ObjectId(req.body._id), "detail._id": ObjectId(req.body.detail_id)};
             let updateData = {"$set": {"detail.$": detail }};
             let putTodo = await dbQuery.findOneAndUpdate(TodoModel, findData, updateData);
+
+            let find =  [
+                { $match : {  author: ObjectId(userInfo._id) }},
+                {
+                    $addFields: { active : false }
+                },
+                { $project : {
+                    _id : 1,
+                    title : 1,
+                    createDT : 1,
+                    startDT : 1,
+                    endDT: 1,
+                    detail : 1,
+                    status : 1,
+                    active : 1 
+                    }
+                }
+            ];
+            let todoInfo = await dbQuery.aggregate(TodoModel, find); 
             output.msg = 'success';
+            output.data = todoInfo;
             res.status(200).send(output);
         } else {
             output.msg = 'not auth';
