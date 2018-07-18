@@ -73,14 +73,20 @@ exports.todoUpdate = async function(req,res,next) {
     try {
         let tokenCheck = req.body.tokenData;
         let userInfo = req.body.userInfo;
+        let totalStatus;
+        let updateData;
         if (userInfo) {
+            
             let detail = {
                 "_id":req.body.detail_id,
                 'todo' : req.body.todo,
                 "status": req.body.status
-            }
+            };
+            req.body.totalStatus ? 
+            updateData = {"$set": { "status" : req.body.totalStatus , "detail.$": detail }} :
+            updateData = {"$set": { "detail.$": detail }} 
+            
             let findData = { "detail._id": ObjectId(req.body.detail_id)};
-            let updateData = {"$set": {"detail.$": detail }};
             let putTodo = await dbQuery.findOneAndUpdate(TodoModel, findData, updateData);
 
             let find =  [

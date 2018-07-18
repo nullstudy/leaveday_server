@@ -29,7 +29,7 @@ exports.userAuth = async function(req, res, next) { // 로긴 성공
     }
 }
 
-exports.userCheck = async function(req, res, next) { //사용자 인증
+exports.userCheck = async function(req, res, next) {//사용자 인증
     const output = {};
     try {
         let tokenCheck = req.body.tokenData;
