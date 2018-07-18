@@ -1,4 +1,4 @@
-var DiaryModel = require('../model/jobdiarydb');
+var DiaryModel = require('../model/Jobdiarydb');
 var UserModel = require('../model/Userdb')
 var ObjectId = require('mongodb').ObjectID;
 var dbQuery = require('../util/dbQuery');
