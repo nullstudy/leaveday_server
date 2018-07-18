@@ -1,3 +1,4 @@
+
 exports.FindOne = function(model, data) {
     return new Promise(function(resolve, reject) {
         model.findOne(data, function(err, result) {
@@ -13,7 +14,7 @@ exports.FindOne = function(model, data) {
 
 
 //mongodb save문
-exports.saveRoom = function(data) {
+exports.save = function(data) {
     return new Promise(function(resolve, reject) {
         data.save(function(err, result) {
             if (err) {
@@ -39,6 +40,24 @@ exports.updateDate = function(model, findData, updateData) {
     })
 };
 
+
+//update
+exports.findOneAndUpdate = function(model, findData, updateData) {
+
+    return new Promise(function(resolve, reject) {
+        model.findOneAndUpdate( findData, updateData, { returnNewDocument: true }, function(err, result) {
+            if (err) {
+                reject(new Error("update error"));
+            } else {
+                resolve(result);
+            }
+        })
+    })
+
+};
+
+
+
 //aggregate
 exports.aggregate = function(model, findData) {
     return new Promise(function(resolve, reject) {
@@ -50,7 +69,7 @@ exports.aggregate = function(model, findData) {
     })
 };
 
-exports.getUserFind = function(model, data) {
+exports.Find = function(model, data) {
     return new Promise(function(resolve, reject) {
         model.find(data, function(err, result) {
             if (err)
@@ -62,6 +81,21 @@ exports.getUserFind = function(model, data) {
         });
     });
 }
+
+exports.findOption1 = function(model, findData, showData) { //limit추가
+    return new Promise(function(resolve, reject) {
+        model.find(findData, showData).exec(function(err, result) {
+            if (err) {
+                console.log(err)
+                reject(new Error("add error"));
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+
 
 exports.findLimit = function(model, findData, showData) { //limit추가
     return new Promise(function(resolve, reject) {
