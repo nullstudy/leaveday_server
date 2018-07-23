@@ -10,8 +10,8 @@
             "port": 3001
         },
         "google": {
-            "clientId": "781928269095-k2asibrbmrnegkv14lhn8fchm783i4vt.apps.googleusercontent.com",
-            "secret": "wmTCLW9o__1XecvcOArQMQ3l"
+            "clientId": "781928269095-k1mi8sallupdcr0eifqf2k5sd70ps42k.apps.googleusercontent.com",
+            "secret": "AIzaSyCQFzbx4Ja-NcwMpNqKe2Rtao3WNatoPE8"
         },
         "facebook": {
             "clientId": "410191759442891",
