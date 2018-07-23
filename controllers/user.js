@@ -23,10 +23,10 @@ exports.userAuth = async function(req, res, next) { // 로긴 성공
         console.log('로그인성공',req.session.passport.user.userToken)
         res.cookie('userToken', req.session.passport.user.userToken);
         res.setHeader('Authorization','Bearer ' + req.session.passport.user.userToken);
-        output.msg ='success';
-        res.status(200).send(output)
+        // output.msg ='success';
+        // res.status(200).send(output)
         // res.redirect('http://localhost:6005');
-        // res.redirect('http://13.209.37.149:6005');
+        res.redirect('http://13.209.37.149:6005');
     } catch (e) {
         output.msg = 'try fail';
         console.log(e)
