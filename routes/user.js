@@ -10,7 +10,7 @@ const userController = require('../controllers/user');
 
 
 module.exports = function(app, passport, config) {
-    app.get('/', userController.userIndex);
+    app.get('/test', userController.userIndex);
     app.get('/loginSuccess', userController.userAuth);
     app.get('/userInfo',jsonWebToken.authMiddleware,userUtil.userVerify,userController.userCheck);
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -21,6 +21,7 @@ module.exports = function(app, passport, config) {
 
     passport.serializeUser(function(user, done) { done(null, user) });
     passport.deserializeUser(function(user, done) { done(null, user) });
+
     passport.use(new GoogleStrategy({
             clientID: config.get('Customer.google.clientId'),
             clientSecret: config.get('Customer.google.secret'),
