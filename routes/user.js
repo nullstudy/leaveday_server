@@ -26,8 +26,8 @@ module.exports = function(app, passport, config) {
     passport.use(new GoogleStrategy({
             clientID: config.get('Customer.google.clientId'),
             clientSecret: config.get('Customer.google.secret'),
-            callbackURL: 'https://www.leaveday.cf/auth/google/callback'
-            // callbackURL: '/auth/google/callback'
+            // callbackURL: 'https://www.leaveday.cf/auth/google/callback'
+            callbackURL: '/auth/google/callback'
         },
         async function(accessToken, refreshToken, profile, done) {
             const userId = { email: profile.emails[0].value }
