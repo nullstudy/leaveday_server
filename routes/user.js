@@ -11,6 +11,7 @@ const userController = require('../controllers/user');
 
 module.exports = function(app, passport, config) {
     app.get('/test', userController.userIndex);
+    app.get('/', userController.userIndex);
     app.get('/loginSuccess', userController.userAuth);
     app.get('/userInfo',jsonWebToken.authMiddleware,userUtil.userVerify,userController.userCheck);
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
