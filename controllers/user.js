@@ -20,6 +20,7 @@ exports.userIndex = async function(req, res, next) { //유저 로그인
 exports.userAuth = async function(req, res, next) { // 로긴 성공
     const output = new Object();
     try {
+        console.log('로그인성공',req.session.passport.user.userToken)
         res.cookie('userToken', req.session.passport.user.userToken);
         res.setHeader('Authorization','Bearer ' + req.session.passport.user.userToken);
         // res.redirect('http://localhost:6005');
