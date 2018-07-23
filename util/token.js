@@ -21,7 +21,7 @@ exports.authMiddleware = async function(req, res, next) {
     try {
         let token;
         let bearerHeader = req.headers["authorization"];
-        console.log('여기를 타나?')
+        console.log('bearerHeader',bearerHeader)
         if (typeof bearerHeader !== 'undefined') {
             let bearer = bearerHeader.split(" ");
             token = bearer[1];
@@ -31,6 +31,7 @@ exports.authMiddleware = async function(req, res, next) {
 
         jwt.verify(token, secretKey, (err, decoded) => {
             if (err) {
+                console.log('에러',err)
                 res.redirect('/login');
             } else {
                 let tokenData = {};
