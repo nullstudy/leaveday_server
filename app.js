@@ -20,6 +20,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Authorization,Content-Type, Origin, X-Requested-With,  Accept");
     next();
 });
+
 var session = require('express-session');
 var passport = require('passport');
 
